@@ -32,11 +32,29 @@ defmodule ExTwilio.ResultStream do
   """
   def new(module, options \\ []) do
     url = UrlGenerator.build_url(module, nil, options)
-
+    IO.inspect url
     Stream.resource(fn -> {url, module, options} end, &process_page/1, fn _ -> nil end)
   end
 
   @spec fetch_page(url, module, options :: list) :: {list, {url, module, options :: list}}
+####
+#  defp fetch_page(url, module = ExTwilio.AvailablePhoneNumber, options) do
+#    IO.puts "Shunt"
+#    results = Api.get!(url, Api.auth_header(options))
+#    IO.inspect results
+#    {:ok, items, meta} = Parser.parse_list(results, module, module.resource_collection_name)
+#    IO.inspect items
+#    test = Map.get(meta, "countries")
+#    test2 = for country <- test do
+#                stuff = Map.get(country, "subresource_uris")
+#                for local <- stuff do
+#                  Map.get(stuff, "mobile")
+#                end
+#            end
+#    IO.inspect test2
+#    {[], {next_page_url(hd(test2)|> hd), module, options}}
+#  end
+
   defp fetch_page(url, module, options) do
     results = Api.get!(url, Api.auth_header(options))
     {:ok, items, meta} = Parser.parse_list(results, module, module.resource_collection_name)

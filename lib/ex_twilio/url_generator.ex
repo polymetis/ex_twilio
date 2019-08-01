@@ -59,6 +59,15 @@ defmodule ExTwilio.UrlGenerator do
           url = add_segments(Config.fax_url(), module, id, options)
           {url, options}
 
+        ["ExTwilio", "AvailablePhoneNumber" | _ ] ->
+          IO.puts("I am a url")
+          country = Keyword.get(options,:cc)
+          phone_type = Keyword.get(options,:phone_type)
+          options = Keyword.delete(options, :cc)
+          options = Keyword.delete(options,:phone_type )
+          options = add_account_to_options(module, options)
+          url = add_segments(Config.base_url(), module, id, options) <> "/" <> country <> "/" <> phone_type <> ".json"
+          {url, options}
         _ ->
           # Add Account SID segment if not already present
           options = add_account_to_options(module, options)
