@@ -60,7 +60,6 @@ defmodule ExTwilio.UrlGenerator do
           {url, options}
 
         ["ExTwilio", "AvailablePhoneNumber" | _ ] ->
-          IO.puts("I am a url")
           country = Keyword.get(options,:cc)
           phone_type = Keyword.get(options,:phone_type)
           options = Keyword.delete(options, :cc)
